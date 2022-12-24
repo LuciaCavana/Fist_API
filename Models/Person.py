@@ -1,31 +1,28 @@
 from typing import Optional
+from .HairColor import HairColor as HC
 from pydantic import BaseModel
 from pydantic import Field, EmailStr, PositiveFloat
 
+
 class Person(BaseModel):
-    person_id:int=Field()
-    first_name
-    last_name
-    age
-    is_married
-    hair_color
-    person_email
-    earnings
-    
-    
-    
-    
-    
-    
-    
-    city:str = Field(...,max_length=50, min_length=1, title="City name", description="This is city name") 
-    state: str = Field(...,max_length=50, min_length=1, title="State name", description="This is state name")
-    country: str = Field(...,max_length=50, min_length=1, title="Country name", description="This is country name")
+    person_id:int=Field(..., ge=0,title="Person ID", description="This is Person ID")
+    first_name:str=Field(..., max_length=30, min_length=1, title="First name", description="This is the person first name")
+    last_name:str=Field(..., max_length=30, min_length=1, title="Last name", description="This is the person last name")
+    age: int = Field(..., gt=1, lt=115, title="Person age", description="This is person age")
+    is_married:bool=Field(default=None, title="", description="")
+    hair_color: Optional[HC]=Field(default=None, title="Person hair color", description="This is person hair color")
+    person_email: EmailStr = Field(default=None, title="Person email", description="This is person email")
+    earnings: PositiveFloat = Field(default=None, title="Person earnings", description="This is person earnings")
     class Config:
         schema_extra={
             "example":{
-                "city":"Saavedra",
-                "state":"CABA",
-                "country":"Argentina"
+                "person_id": "1",
+                "first_name": "Lucia",
+                "last_name": "Cavana",
+                "age": 22,
+                "hair_color": "brown",
+                "is_married": False,
+                "person_email": "luciacavana@yahoo.com",
+                "earnings": 120000
             }
         }
