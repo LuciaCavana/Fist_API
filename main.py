@@ -2,8 +2,8 @@
 from typing import Optional
 
 #Models
-from Models import Person, Location
-
+from Models.Person import Person, PersonOut
+from Models.Location import Location
 #Pydantic
 #from pydantic import BaseModel
 
@@ -19,8 +19,8 @@ def home():
     return {"Hello": "Word"}
 
 # Request  and Response Body
-@app.post("/person/new")
-def Create_Person(person: Person.Person = Body(...)):
+@app.post("/person/new",response_model=PersonOut)
+def Create_Person(person: Person = Body(...)):
     return person
 
 #Validaciones Querry parameters 
@@ -62,13 +62,13 @@ def show_person(
 def update_person(
     person_id: int = Path(
         ...,
-        title="ID de la persona",
         description= "Este es el ID de la persona",
+        title="ID de la persona",
         gt = 0,
         example=1
     ),
-    person:Person.Person = Body(...),
-    location: Location.Location = Body(...) 
+    person:Person = Body(...),
+    location: Location = Body(...) 
 ):
     results = person.dict()
     results.update(location.dict())
