@@ -1,6 +1,7 @@
 #Python
 from typing import Optional
 
+#from Generate_Models import person
 
 #Models
 from Models.Person import Person, PersonOut
@@ -13,8 +14,10 @@ from pydantic import EmailStr
 #FastAPI
 from fastapi import FastAPI
 from fastapi import status
-from fastapi import Body, Query, Path, Form, Cookie, Header
-from fastapi import File, UploadFile
+from fastapi import HTTPException
+from fastapi import Body, Query, Path, Form, Cookie, Header, File, UploadFile
+
+id_person = [1,2,3,4,5]
 
 app = FastAPI()
 
@@ -31,6 +34,7 @@ def home():
     response_model=PersonOut, 
     status_code=status.HTTP_201_CREATED)
 def Create_Person(person: Person = Body(...)):
+    
     return person
 
 #Validaciones Querry parameters 
@@ -55,7 +59,6 @@ def show_person(
         ) 
     ):  
     return {name:age}
-
 #Validaciones: Path Parameters
 @app.get(
     path="/person/detail/{person_id}",
@@ -69,6 +72,11 @@ def show_person(
         example=1
         )
     ):
+    if person_id not in id_person:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail= "¡This person doesn't exist!"
+        )
     return {person_id:"It Exists!"}
 
 #Validaciones: Request Body
