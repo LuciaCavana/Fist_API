@@ -23,7 +23,8 @@ app = FastAPI()
 
 @app.get(
     path="/", 
-    status_code=status.HTTP_200_OK)
+    status_code=status.HTTP_200_OK,
+    tags=["Home"])
 def home():
     
     return {"Hello": "Word"}
@@ -32,7 +33,8 @@ def home():
 @app.post(
     path="/person/new",
     response_model=PersonOut, 
-    status_code=status.HTTP_201_CREATED)
+    status_code=status.HTTP_201_CREATED,
+    tags=["Persons"])
 def Create_Person(person: Person = Body(...)):
     
     return person
@@ -40,7 +42,8 @@ def Create_Person(person: Person = Body(...)):
 #Validaciones Querry parameters 
 @app.get(
     path="/person/detail",
-    status_code=status.HTTP_200_OK)
+    status_code=status.HTTP_200_OK,
+    tags=["Persons"])
 def show_person(    
     name:Optional[str] = Query(
         default=None, 
@@ -62,7 +65,8 @@ def show_person(
 #Validaciones: Path Parameters
 @app.get(
     path="/person/detail/{person_id}",
-    status_code=status.HTTP_200_OK) 
+    status_code=status.HTTP_200_OK,
+    tags=["Persons"]) 
 def show_person(
     person_id: int = Path(
         ..., 
@@ -82,7 +86,8 @@ def show_person(
 #Validaciones: Request Body
 @app.put(
     path="/person/{person_id}",
-    status_code=status.HTTP_201_CREATED)
+    status_code=status.HTTP_201_CREATED,
+    tags=["Persons"])
 def update_person(
     person_id: int = Path(
         ...,
@@ -101,7 +106,8 @@ def update_person(
 @app.post(
     path="/login",
     response_model=LoginOut,
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Persons"]
     )
 def login(username:str= Form(...), password:str=Form(...)):
     
@@ -109,7 +115,7 @@ def login(username:str= Form(...), password:str=Form(...)):
 
 
 #Cookies and Header class
-@app.post("/contact")
+@app.post("/contact",tags=["Server"])
 def contact(
     first_name:str=Form(
         ...,
@@ -133,7 +139,8 @@ def contact(
 
 #Files
 @app.post(
-    path="/post-image"
+    path="/post-image",
+    tags=["Files"]
 )
 def post_image(
     image: UploadFile = File(...)
