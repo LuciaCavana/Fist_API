@@ -17,7 +17,29 @@ from fastapi import status
 from fastapi import HTTPException
 from fastapi import Body, Query, Path, Form, Cookie, Header, File, UploadFile
 
-id_person = [1,2,3,4,5]
+
+id_person = {
+    1:{
+        "name":"Lucia", 
+        "age":22
+        },
+    2:{
+        "name":"Matias",
+        "age":17
+        },
+    3:{
+        "name":"Fernando", 
+        "age":40
+        },
+    4:{
+        "name":"Martina", 
+        "age":20
+        },
+    5:{
+        "name":"Lucila", 
+        "age":50
+        },
+}
 
 app = FastAPI()
 
@@ -55,7 +77,8 @@ def Create_Person(person: Person = Body(...)):
     path="/person/detail",
     status_code=status.HTTP_200_OK,
     tags=["Persons"],
-    summary="Details person in the app")
+    summary="Details person in the app",
+    deprecated=True)
 def show_person(    
     name:str= Query(..., 
         min_length=1, 
@@ -72,6 +95,7 @@ def show_person(
         example=22
         ) 
     ):  
+    
     
     """
     Show Person
@@ -99,25 +123,27 @@ def show_person(
         title='Id de la persona',
         description= 'Ingresa el id de la persona buscada. Es un campo obliatorio',
         example=1
-        )
+        ) 
     ):
     '''
     Show Person
     
-    This path operation proves that a person's id exists in the data base 
+    This path operation proves that a person's id exists in the data base and shows the name and age
     
     Parameters: 
     - Request path parameter: 
         - **person_id: int** -> the id of a person
 
-    Returns if a person exists or an HTTP error if the person does not exist in the database
+    Returns if a person exists, the name and age or an HTTP error if the person does not exist in the database
     '''
     if person_id not in id_person:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail= "¡This person doesn't exist!"
         )
-    return {person_id:"It Exists!"}
+    date =  dict(id_person[person_id])
+    return {person_id:"It Exists!",date["name"]:date["age"]}
+
 
 #Validaciones: Request Body
 @app.put(
