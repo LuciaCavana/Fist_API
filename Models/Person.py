@@ -18,6 +18,7 @@ class PersonBase(BaseModel):
 
 #Generate Person
 class Person(PersonBase):
+    username:str=Field(...,max_length=20,min_length=1, title="Username",description="This is username")
     password: str=Field(...,max_length=16,min_length=8, title="Passwor", description="This Password requires a minimum of 8 characters and maximum of 16")
     class Config:
         schema_extra={
@@ -30,7 +31,8 @@ class Person(PersonBase):
                 "is_married": False,
                 "person_email": "luciacavana@yahoo.com",
                 "earnings": 120000,
-                "password":"admin123"
+                "password":"admin123",
+                "username":"LuciaDani"
             }
         }
 
